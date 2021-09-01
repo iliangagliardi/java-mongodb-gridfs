@@ -32,13 +32,14 @@ public class ServiceTest {
     static Logger logger;
     List<String> controlList = new ArrayList<String>();
 
-
+    static String connectionString = "mongodb://node1:27017,node2:27017,node3:27017/?replicaSet=rs";
+    static String options = "&connectTimeoutMS=5000&socketTimeoutMS=60000&compressors=snappy&maxPoolSize=200&minPoolSize=50";
 
     public static void main(String[] args) {
         LogManager.getLogManager().reset();
         MongoClient mongoClient = MongoClients.create(MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString("mongodb://node1:27017,node2:27017,node3:27017/?replicaSet=rs&connectTimeoutMS=5000&socketTimeoutMS=60000&compressors=snappy&maxPoolSize=200&minPoolSize=50"))
-                .credential(MongoCredential.createCredential("ilian", "admin", "Password.".toCharArray()))
+                .applyConnectionString(new ConnectionString(connectionString+options))
+                .credential(MongoCredential.createCredential("ilian", "admin", "".toCharArray()))
                 .build());
         MongoDatabase gridFSDB = mongoClient.getDatabase("gridFSDB");
         GridFSBucket gridFSBucket = GridFSBuckets.create(gridFSDB,"gridFS")
